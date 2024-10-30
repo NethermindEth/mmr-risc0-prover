@@ -2,6 +2,7 @@
 Cargo.lock
 methods/guest/Cargo.lock
 target/
+.env
 
 .snfoundry_cache/
 *.json
