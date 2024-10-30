@@ -1,0 +1,10 @@
+.DS_Store
+Cargo.lock
+methods/guest/Cargo.lock
+target/
+
+.snfoundry_cache/
+*.json
+.python-version
+venv/
+requirements.txt

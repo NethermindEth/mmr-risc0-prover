@@ -1,0 +1,20 @@
+[package]
+name = "host"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+garaga_rs = { git = "https://github.com/keep-starknet-strange/garaga.git" }
+
+methods = { path = "../methods" }
+risc0-zkvm = { version = "1.1.2" }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde = "1.0"
+dotenv = "0.15"
+hex = "0.4"
+anyhow = "1.0"
+risc0-ethereum-contracts = { git = "https://github.com/risc0/risc0-ethereum", tag = "v1.1.4" }
+alloy = { version = "0.5.4", features = ["full"] }
+eyre = "0.6"
+risc0-groth16 = "1.1.2"
+num-bigint = "0.4"
