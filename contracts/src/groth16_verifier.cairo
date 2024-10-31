@@ -3,7 +3,7 @@ use super::groth16_verifier_constants::{N_FREE_PUBLIC_INPUTS, vk, ic, precompute
 #[starknet::interface]
 pub trait IRisc0Groth16VerifierBN254<TContractState> {
     fn verify_groth16_proof_bn254(
-        ref self: TContractState, full_proof_with_hints: Span<felt252>,
+        self: @TContractState, full_proof_with_hints: Span<felt252>,
     ) -> Option<Span<u8>>;
 }
 
@@ -20,16 +20,21 @@ mod Risc0Groth16VerifierBN254 {
 
     // const ECIP_OPS_CLASS_HASH: felt252 =
     //     0x70c1d1c709c75e3cf51d79d19cf7c84a0d4521f3a2b8bf7bff5cb45ee0dd289;
-    const ECIP_OPS_CLASS_HASH: felt252 =
-        65068491214503712038773489272636356682711836138068563906014780017043912390;
 
     #[storage]
-    struct Storage {}
+    struct Storage {
+        ecip_ops_class_hash: felt252,
+    }
+
+    #[constructor]
+    fn constructor(ref self: ContractState, ecip_ops_class_hash: felt252) {
+        self.ecip_ops_class_hash.write(ecip_ops_class_hash);
+    }
 
     #[abi(embed_v0)]
     impl IRisc0Groth16VerifierBN254 of super::IRisc0Groth16VerifierBN254<ContractState> {
         fn verify_groth16_proof_bn254(
-            ref self: ContractState, full_proof_with_hints: Span<felt252>,
+            self: @ContractState, full_proof_with_hints: Span<felt252>,
         ) -> Option<Span<u8>> {
             // DO NOT EDIT THIS FUNCTION UNLESS YOU KNOW WHAT YOU ARE DOING.
             // This function returns an Option for the public inputs if the proof is valid.
@@ -68,12 +73,15 @@ mod Risc0Groth16VerifierBN254 {
 
             // Call the multi scalar multiplication endpoint on the Garaga ECIP ops contract
             // to obtain claim0 * IC[3] + claim1 * IC[4].
+            println!("Calling msm");
+            println!("ecip_ops_class_hash: {:?}", self.ecip_ops_class_hash.read());
             let mut _msm_result_serialized = core::starknet::syscalls::library_call_syscall(
-                ECIP_OPS_CLASS_HASH.try_into().unwrap(),
+                self.ecip_ops_class_hash.read().try_into().unwrap(),
                 selector!("msm_g1_u128"),
                 msm_calldata.span()
             )
                 .unwrap_syscall();
+            println!("Called msm");
 
             // Finalize vk_x computation by adding the precomputed T point.
             let vk_x = ec_safe_add(
