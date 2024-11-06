@@ -11,7 +11,7 @@ use starknet::{
 };
 use starknet_crypto::Felt;
 
-pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Felt>, Vec<u8>> {
+pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Felt>> {
     dotenv().ok();
 
     let rpc_url =
@@ -21,8 +21,10 @@ pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Fe
         Url::parse(&rpc_url).expect("Invalid rpc url provided"),
     ));
 
-    let verifier_address_from_env = env::var("VERIFIER_ADDRESS").expect("VERIFIER_ADDRESS should be provided as env vars.");
-    let contract_address = Felt::from_hex(&verifier_address_from_env).expect("Invalid verifier address provided");
+    let verifier_address_from_env =
+        env::var("VERIFIER_ADDRESS").expect("VERIFIER_ADDRESS should be provided as env vars.");
+    let contract_address =
+        Felt::from_hex(&verifier_address_from_env).expect("Invalid verifier address provided");
     println!("contract_address: {:?}", contract_address);
 
     let result = provider
