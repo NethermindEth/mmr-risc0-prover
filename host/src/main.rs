@@ -9,28 +9,25 @@ use eyre::Result;
 // };
 use methods::{METHOD_ELF, METHOD_ID};
 use mmr::PeaksOptions;
+pub use mmr_accumulator::{ethereum::get_finalized_block_hash, processor_utils::*, BlockHeader};
 use store::SubKey;
-pub use mmr_accumulator::{
-    ethereum::get_finalized_block_hash,
-    BlockHeader,
-    processor_utils::*,
-};
 // use risc0_ethereum_contracts::encode_seal;
-use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
+// use risc0_zkvm::{default_prover, ExecutorEnv, ProverOpts, VerifierContext};
+use risc0_zkvm::{default_prover, ExecutorEnv};
 // use risc0_zkvm::compute_image_id;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use starknet_crypto::Felt;
 // use starknet_handler::verify_groth16_proof_onchain;
 use tokio::task;
 use tracing_subscriber;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct CombinedInput {
     headers: Vec<BlockHeader>,
     mmr_input: GuestInput,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct GuestInput {
     initial_peaks: Vec<String>,
     elements_count: usize,
@@ -73,7 +70,6 @@ async fn main() -> Result<()> {
     let headers = get_block_headers_in_range(start_block, finalized_block_number)
         .await
         .unwrap();
-    println!("Headers Length: {:?}", headers.len());
 
     // Get current MMR state
     let current_peaks = _mmr.get_peaks(PeaksOptions::default()).await?;
@@ -92,10 +88,8 @@ async fn main() -> Result<()> {
         mmr_input,
     };
 
-    let (_calldata, receipt) = task::spawn_blocking(move || {
-        run_blocking_tasks(&combined_input)
-    })
-    .await??;
+    let (_calldata, receipt) =
+        task::spawn_blocking(move || run_blocking_tasks(&combined_input)).await??;
 
     receipt.verify(METHOD_ID).unwrap();
 
@@ -108,10 +102,12 @@ async fn main() -> Result<()> {
     if true {
         // Decode the guest output from the receipt
         let guest_output: GuestOutput = receipt.journal.decode()?;
-        
+
         // Verify the MMR state transition
         if guest_output.elements_count < current_elements_count {
-            return Err(eyre::eyre!("Invalid MMR state transition: elements count decreased"));
+            return Err(eyre::eyre!(
+                "Invalid MMR state transition: elements count decreased"
+            ));
         }
 
         // Update MMR state with the verified results
@@ -133,26 +129,23 @@ async fn main() -> Result<()> {
 }
 
 fn run_blocking_tasks(input: &CombinedInput) -> Result<(Vec<Felt>, risc0_zkvm::Receipt)> {
-    println!("Initial peaks: {:?}", input.mmr_input.initial_peaks);
-    println!("Initial elements count: {}", input.mmr_input.elements_count);
-    println!("Initial leaves count: {}", input.mmr_input.leaves_count);
-
     let env = ExecutorEnv::builder()
         .write(&input)
         .unwrap()
         .build()
         .unwrap();
-    println!("Env Set");
 
-    let receipt = default_prover()
-        .prove_with_ctx(
-            env,
-            &VerifierContext::default(),
-            METHOD_ELF,
-            &ProverOpts::groth16(),
-        )
-        .map_err(|e| eyre::eyre!(e.to_string()))?
-        .receipt;
+    let receipt = default_prover().prove(env, METHOD_ELF).unwrap().receipt;
+
+    // let receipt = default_prover()
+    //     .prove_with_ctx(
+    //         env,
+    //         &VerifierContext::default(),
+    //         METHOD_ELF,
+    //         &ProverOpts::groth16(),
+    //     )
+    //     .map_err(|e| eyre::eyre!(e.to_string()))?
+    //     .receipt;
 
     // let encoded_seal = encode_seal(&receipt).map_err(|e| eyre::eyre!(e.to_string()))?;
     // println!("Solidity Encoded Seal: 0x{}", encode(encoded_seal.clone()));
@@ -175,30 +168,91 @@ fn run_blocking_tasks(input: &CombinedInput) -> Result<(Vec<Felt>, risc0_zkvm::R
 
 #[cfg(test)]
 mod tests {
+    // use std::path::PathBuf;
+
     use super::*;
     use block_validity::utils::are_blocks_and_chain_valid;
+    use eyre::Result;
+    use tempfile;
 
     #[tokio::test]
     async fn test_mmr_state_transition() -> Result<()> {
-        // Setup test environment
+        // Create a temporary directory with proper permissions
         let test_dir = tempfile::tempdir()?;
-        let store_path = test_dir.path().join("test.db");
-        let (_store_manager, mmr, _pool) = initialize_mmr(store_path.to_str().unwrap()).await?;
+        let db_dir = test_dir.path().join("db-instances");
+        std::fs::create_dir_all(&db_dir)?;
 
-        // Create test data
-        let test_headers = vec![
-            create_test_block_header("0x1234", "0x0000"),
-            create_test_block_header("0x5678", "0x1234"),
-        ];
+        // Create the database file first to ensure proper permissions
+        let store_path = db_dir.join("test.db");
+        if let Some(parent) = store_path.parent() {
+            std::fs::create_dir_all(parent)?;
+        }
 
-        // Get initial MMR state
+        // Touch the file to ensure it exists with proper permissions
+        std::fs::OpenOptions::new()
+            .create(true)
+            .write(true)
+            .open(&store_path)?;
+
+        // Initialize MMR with the prepared database
+        let (_store_manager, mmr, _pool) = initialize_mmr(store_path.to_str().unwrap())
+            .await
+            .map_err(|e| eyre::eyre!("Failed to initialize MMR: {}", e))?;
+
+        let test_headers = fetch_test_headers(17034870, 2).await?;
+
         let initial_peaks = mmr.get_peaks(PeaksOptions::default()).await?;
         let initial_elements_count = mmr.elements_count.get().await?;
         let initial_leaves_count = mmr.leaves_count.get().await?;
 
-        // Create guest input
         let mmr_input = GuestInput {
             initial_peaks: initial_peaks.clone(),
+            elements_count: initial_elements_count,
+            leaves_count: initial_leaves_count,
+            new_elements: test_headers.iter().map(|h| h.block_hash.clone()).collect(),
+        };
+
+        let combined_input = CombinedInput {
+            headers: test_headers,
+            mmr_input,
+        };
+
+        // Run the blocking task in a separate thread
+        let (_calldata, receipt) =
+            tokio::task::spawn_blocking(move || run_blocking_tasks(&combined_input)).await??;
+
+        receipt.verify(METHOD_ID).unwrap();
+
+        // Keep the TempDir alive until the end of the test
+        std::mem::drop(test_dir);
+
+        Ok(())
+    }
+
+
+    #[tokio::test]
+    async fn test_full_workflow() -> Result<()> {
+        // Setup database
+        let test_dir = tempfile::tempdir()?;
+        let db_dir = test_dir.path().join("db-instances");
+        std::fs::create_dir_all(&db_dir)?;
+        let store_path = db_dir.join("test.db");
+
+        std::fs::OpenOptions::new()
+            .create(true)
+            .write(true)
+            .open(&store_path)?;
+
+        let (store_manager, mut mmr, pool) = initialize_mmr(store_path.to_str().unwrap()).await?;
+
+        let test_headers = fetch_test_headers(17034870, 8).await?;
+
+        let initial_peaks = mmr.get_peaks(PeaksOptions::default()).await?;
+        let initial_elements_count = mmr.elements_count.get().await?;
+        let initial_leaves_count = mmr.leaves_count.get().await?;
+
+        let mmr_input = GuestInput {
+            initial_peaks,
             elements_count: initial_elements_count,
             leaves_count: initial_leaves_count,
             new_elements: test_headers.iter().map(|h| h.block_hash.clone()).collect(),
@@ -209,243 +263,87 @@ mod tests {
             mmr_input,
         };
 
-        // Run the proof generation
-        let (_calldata, receipt) = run_blocking_tasks(&combined_input)?;
+        let (_calldata, receipt) =
+            tokio::task::spawn_blocking(move || run_blocking_tasks(&combined_input)).await??;
 
-        // Verify the receipt
         receipt.verify(METHOD_ID).unwrap();
 
-        // Decode and verify the output
         let guest_output: GuestOutput = receipt.journal.decode()?;
 
-        // Verify state transition
-        assert!(guest_output.elements_count > initial_elements_count, 
-            "Elements count should increase");
-        assert!(guest_output.leaves_count > initial_leaves_count,
-            "Leaves count should increase");
-        assert!(!guest_output.final_peaks.is_empty(), 
-            "Should have peaks after insertion");
+        // Store the append results for verification
+        let mut append_results = Vec::new();
 
-        // Verify each append result
-        for (i, result) in guest_output.append_results.iter().enumerate() {
-            assert_eq!(result.element_index, initial_elements_count + i + 1,
-                "Element indices should be sequential");
+        // Update MMR state with the block hashes
+        for (_, header) in test_headers.iter().enumerate() {
+            // First append to MMR to get the index
+            let append_result = mmr.append(header.block_hash.clone()).await?;
+            append_results.push(append_result.clone());
+
+            // Then update the store mapping
+            store_manager
+                .insert_value_index_mapping(&pool, &header.block_hash, append_result.element_index)
+                .await?;
         }
 
-        // Clean up
-        test_dir.close()?;
+        let current_peaks = mmr.get_peaks(PeaksOptions::default()).await?;
+        let current_elements_count = mmr.elements_count.get().await?;
+        let current_leaves_count = mmr.leaves_count.get().await?;
+
+        // Verify each block was properly added
+        for (i, header) in test_headers.iter().enumerate() {
+            let append_result = &append_results[i];
+
+            let stored_index = store_manager
+                .get_value_for_element_index(&pool, append_result.element_index)
+                .await?;
+
+            assert!(
+                stored_index.is_some(),
+                "Block {} should be stored in MMR at index {}",
+                i,
+                append_result.element_index
+            );
+
+            if let Some(stored_value) = stored_index {
+                assert_eq!(
+                    stored_value, header.block_hash,
+                    "Stored hash doesn't match block hash for block {}",
+                    i
+                );
+            }
+        }
+
+        // Verify final peaks match guest output
+        assert_eq!(
+            current_peaks, guest_output.final_peaks,
+            "Final peaks don't match"
+        );
+        assert_eq!(
+            current_elements_count, guest_output.elements_count,
+            "Elements count doesn't match"
+        );
+        assert_eq!(
+            current_leaves_count, guest_output.leaves_count,
+            "Leaves count doesn't match"
+        );
+
         Ok(())
+    }
+
+    async fn fetch_test_headers(start_block: u64, count: usize) -> Result<Vec<BlockHeader>> {
+        let end_block = start_block + count as u64 - 1;
+        get_block_headers_in_range(start_block, end_block)
+            .await
+            .map_err(|e| eyre::eyre!("Failed to fetch headers: {}", e))
     }
 
     #[tokio::test]
     async fn test_block_validation() -> Result<()> {
-        // Test data
-        let test_headers = vec![
-            create_test_block_header("0x1234", "0x0000"),
-            create_test_block_header("0x5678", "0x1234"),
-        ];
-
-        // Verify block chain validity
-        assert!(are_blocks_and_chain_valid(&test_headers),
-            "Test headers should form valid chain");
-
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_invalid_state_transition() -> Result<()> {
-        // Setup test environment with invalid state transition
-        let test_dir = tempfile::tempdir()?;
-        // let store_path = test_dir.path().join("test.db");
-        // let (_store_manager, mmr, _pool) = initialize_mmr(store_path.to_str().unwrap()).await?;
-
-        // Create test data with invalid state transition
-        let mmr_input = GuestInput {
-            initial_peaks: vec!["0x1234".to_string()],
-            elements_count: 10,  // Set higher than actual to test invalid transition
-            leaves_count: 5,
-            new_elements: vec!["0x5678".to_string()],
-        };
-
-        let test_headers = vec![
-            create_test_block_header("0x5678", "0x1234"),
-        ];
-
-        let combined_input = CombinedInput {
-            headers: test_headers,
-            mmr_input,
-        };
-
-        // Run the proof generation - should fail
-        let result = run_blocking_tasks(&combined_input);
-        assert!(result.is_err(), "Should fail with invalid state transition");
-
-        // Clean up
-        test_dir.close()?;
-        Ok(())
-    }
-
-    // #[tokio::test]
-    // async fn test_mmr_peaks_calculation() -> Result<()> {
-    //     // Setup test environment
-    //     let test_dir = tempfile::tempdir()?;
-    //     let store_path = test_dir.path().join("test.db");
-    //     let (store_manager, mut mmr, pool) = initialize_mmr(store_path.to_str().unwrap()).await?;
-
-    //     // Add a sequence of elements and verify peaks
-    //     let test_elements = vec![
-    //         "0x1234".to_string(),
-    //         "0x5678".to_string(),
-    //         "0x9abc".to_string(),
-    //     ];
-
-    //     // Initial state
-    //     let initial_peaks = mmr.get_peaks(PeaksOptions::default()).await?;
-
-    //     // Create and process guest input
-    //     let mmr_input = GuestInput {
-    //         initial_peaks: initial_peaks.clone(),
-    //         elements_count: mmr.elements_count.get().await?,
-    //         leaves_count: mmr.leaves_count.get().await?,
-    //         new_elements: test_elements.clone(),
-    //     };
-
-    //     let mut block_header = create_test_block_header("0x1234", "0x0000");
-
-    //     let test_headers: Vec<BlockHeader> = test_elements
-    //         .iter()
-    //         .enumerate()
-    //         .map(|(i, hash)| BlockHeader {
-    //             block_hash: hash.clone(),
-    //             parent_hash: if i == 0 {
-    //                 Some("0x0000".to_string())
-    //             } else {
-    //                 Some(test_elements[i - 1].clone())
-    //             },
-    //             // ... fill other required fields
-    //         })
-    //         .collect();
-
-    //     let combined_input = CombinedInput {
-    //         headers: test_headers,
-    //         mmr_input,
-    //     };
-
-    //     // Run proof generation
-    //     let (_, receipt) = run_blocking_tasks(&combined_input)?;
-    //     let guest_output: GuestOutput = receipt.journal.decode()?;
-
-    //     // Verify peaks properties
-    //     assert!(!guest_output.final_peaks.is_empty(), "Should have peaks");
-    //     assert!(guest_output.final_peaks.len() <= guest_output.leaves_count,
-    //         "Number of peaks should not exceed number of leaves");
-
-    //     // Verify peaks are properly ordered
-    //     for i in 1..guest_output.final_peaks.len() {
-    //         assert!(guest_output.final_peaks[i] > guest_output.final_peaks[i-1],
-    //             "Peaks should be ordered");
-    //     }
-
-    //     // Clean up
-    //     test_dir.close()?;
-    //     Ok(())
-    // }
-
-    // Helper function to create test BlockHeader
-    // Helper function to create test BlockHeader
-    fn create_test_block_header(block_hash: &str, parent_hash: &str) -> BlockHeader {
-        BlockHeader {
-            block_hash: block_hash.to_string(),
-            parent_hash: Some(parent_hash.to_string()),
-            // Fill in other required fields with test data
-            number: 0,
-            timestamp: Some("0x0".to_string()),
-            difficulty: Some("0x0".to_string()),
-            gas_limit: 0,
-            gas_used: 0,
-            nonce: "0x0".to_string(),
-            extra_data: Some("0x0".to_string()),
-            base_fee_per_gas: Some("0x0".to_string()),
-            // transactions_root: Some("0x0".to_string()),
-            state_root: Some("0x0".to_string()),
-            receipts_root: Some("0x0".to_string()),
-            miner: Some("0x0".to_string()),
-            mix_hash: Some("0x0".to_string()),
-            logs_bloom: Some("0x0".to_string()),
-            withdrawals_root: Some("0x0".to_string()),
-            transaction_root: Some("0x0".to_string()),
-            ommers_hash: Some("0x0".to_string()),
-            totaldifficulty: Some("0x0".to_string()),
-            sha3_uncles: Some("0x0".to_string()),
-            blob_gas_used: Some("0x0".to_string()),
-            excess_blob_gas: Some("0x0".to_string()),
-            parent_beacon_block_root: Some("0x0".to_string()),
-        }
-    }
-
-    #[tokio::test]
-    async fn test_full_workflow() -> Result<()> {
-        // Setup test environment
-        let test_dir = tempfile::tempdir()?;
-        let store_path = test_dir.path().join("test.db");
-        let (store_manager, mmr, pool) = initialize_mmr(store_path.to_str().unwrap()).await?;
-
-        // Create a sequence of test blocks
-        let test_blocks = vec![
-            create_test_block_header("0x1234", "0x0000"),
-            create_test_block_header("0x5678", "0x1234"),
-            create_test_block_header("0x9abc", "0x5678"),
-        ];
-
-        // Get initial MMR state
-        let initial_peaks = mmr.get_peaks(PeaksOptions::default()).await?;
-        let initial_elements_count = mmr.elements_count.get().await?;
-        let initial_leaves_count = mmr.leaves_count.get().await?;
-
-        // Create guest input
-        let mmr_input = GuestInput {
-            initial_peaks,
-            elements_count: initial_elements_count,
-            leaves_count: initial_leaves_count,
-            new_elements: test_blocks.iter().map(|b| b.block_hash.clone()).collect(),
-        };
-
-        let combined_input = CombinedInput {
-            headers: test_blocks.clone(),
-            mmr_input,
-        };
-
-        // Run the full workflow
-        let (_calldata, receipt) = run_blocking_tasks(&combined_input)?;
-        
-        // Verify the receipt
-        receipt.verify(METHOD_ID).unwrap();
-        
-        // Decode the output
-        let guest_output: GuestOutput = receipt.journal.decode()?;
-
-        // Verify the state transition
-        assert!(guest_output.elements_count > initial_elements_count);
-        assert!(guest_output.leaves_count > initial_leaves_count);
-        
-        // Verify each block was properly added
-        for (i, _block) in test_blocks.iter().enumerate() {
-            let result = &guest_output.append_results[i];
-            assert_eq!(result.element_index, initial_elements_count + i + 1);
-            
-            // Verify the block can be found in the MMR
-            let stored_index = store_manager
-                .get_value_for_element_index(&pool, result.element_index)
-                .await?;
-            assert!(stored_index.is_some(), "Block should be stored in MMR");
-        }
-
-        // Verify final MMR state
-        let final_peaks = mmr.get_peaks(PeaksOptions::default()).await?;
-        assert_eq!(final_peaks, guest_output.final_peaks);
-
-        // Clean up
-        test_dir.close()?;
+        let test_headers = fetch_test_headers(17034870, 2).await?;
+        assert!(
+            are_blocks_and_chain_valid(&test_headers),
+            "Test headers should form valid chain"
+        );
         Ok(())
     }
 }

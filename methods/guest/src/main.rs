@@ -52,7 +52,7 @@ fn main() {
     }
 
     // Get final peaks
-    let final_peaks = match mmr.get_peaks() {
+    let final_peaks = match mmr.get_peaks(Default::default()) {
         Ok(peaks) => peaks,
         Err(e) => {
             println!("Error getting peaks: {:?}", e);
