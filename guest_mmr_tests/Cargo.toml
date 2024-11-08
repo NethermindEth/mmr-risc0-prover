@@ -1,0 +1,10 @@
+[package]
+name = "guest_mmr_tests"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+guest-types = { path = "../guest-types" }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+starknet-crypto = "0.7.3"

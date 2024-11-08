@@ -9,7 +9,7 @@ use mmr_accumulator::{
     ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, MMR,
 };
 use store::{SqlitePool, SubKey};
-use tracing::info;
+use tracing::{info, debug};
 
 pub struct AccumulatorBuilder {
     batch_size: u64,
@@ -48,17 +48,17 @@ impl AccumulatorBuilder {
     async fn process_batch(&mut self, start_block: u64, end_block: u64) -> Result<BatchResult> {
         // Fetch headers
         let headers = get_block_headers_in_range(start_block, end_block).await?;
-        info!("Fetched {} headers", headers.len());
+        debug!("Fetched {} headers", headers.len());
 
         // Get and verify current MMR state
         let current_peaks = self.mmr.get_peaks(PeaksOptions::default()).await?;
         let current_elements_count = self.mmr.elements_count.get().await?;
         let current_leaves_count = self.mmr.leaves_count.get().await?;
 
-        info!("Current MMR state:");
-        info!("  Elements count: {}", current_elements_count);
-        info!("  Leaves count: {}", current_leaves_count);
-        info!("  Peaks: {:?}", current_peaks);
+        debug!("Current MMR state:");
+        debug!("  Elements count: {}", current_elements_count);
+        debug!("  Leaves count: {}", current_leaves_count);
+        debug!("  Peaks: {:?}", current_peaks);
 
         // Prepare guest input
         let mmr_input = GuestInput {
@@ -116,16 +116,12 @@ impl AccumulatorBuilder {
         Ok(BatchResult {
             start_block,
             end_block,
-            // mmr_state: MMRState {
-            //     peaks: guest_output.final_peaks,
-            //     elements_count: guest_output.elements_count,
-            //     leaves_count: guest_output.leaves_count,
-            // },
             proof: Some(proof),
         })
     }
 
     async fn update_mmr_state(&mut self, guest_output: &GuestOutput) -> Result<()> {
+        debug!("Guest output: {:?}", guest_output);
         // Verify state transition
         let current_elements_count = self.mmr.elements_count.get().await?;
         if guest_output.elements_count < current_elements_count {
@@ -134,10 +130,10 @@ impl AccumulatorBuilder {
             ));
         }
 
-        info!("Updating MMR state:");
-        info!("  Current elements count: {}", current_elements_count);
-        info!("  New elements count: {}", guest_output.elements_count);
-        info!("  New peaks: {:?}", guest_output.final_peaks);
+        debug!("Updating MMR state:");
+        debug!("  Current elements count: {}", current_elements_count);
+        debug!("  New elements count: {}", guest_output.elements_count);
+        debug!("  New peaks: {:?}", guest_output.final_peaks);
 
         // First update the MMR counters
         self.mmr
@@ -148,7 +144,7 @@ impl AccumulatorBuilder {
 
         // Update all hashes in the store
         for result in &guest_output.append_results {
-            info!(
+            debug!(
                 "  Storing hash at index {}: {}",
                 result.element_index, result.root_hash
             );
@@ -168,7 +164,7 @@ impl AccumulatorBuilder {
         // Update peaks
         let peaks_indices = find_peaks(guest_output.elements_count);
         for (peak_hash, &peak_idx) in guest_output.final_peaks.iter().zip(peaks_indices.iter()) {
-            info!("  Storing peak at index {}: {}", peak_idx, peak_hash);
+            debug!("  Storing peak at index {}: {}", peak_idx, peak_hash);
             self.mmr
                 .hashes
                 .set(peak_hash, SubKey::Usize(peak_idx))
@@ -177,7 +173,7 @@ impl AccumulatorBuilder {
 
         // Verify the state was properly updated
         let stored_peaks = self.mmr.get_peaks(PeaksOptions::default()).await?;
-        info!("Verified stored peaks: {:?}", stored_peaks);
+        debug!("Verified stored peaks: {:?}", stored_peaks);
 
         if stored_peaks != guest_output.final_peaks {
             return Err(eyre::eyre!("Failed to verify stored peaks after update"));

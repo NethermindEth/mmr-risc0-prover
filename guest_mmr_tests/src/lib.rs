@@ -1,8 +1,8 @@
 use guest_types::{AppendResult, PeaksFormattingOptions, PeaksOptions};
 use serde::{Deserialize, Serialize};
+use starknet_crypto::{poseidon_hash, poseidon_hash_many, poseidon_hash_single, Felt};
 use std::collections::{HashMap, VecDeque};
 use thiserror::Error;
-use starknet_crypto::{poseidon_hash, poseidon_hash_single, poseidon_hash_many, Felt};
 
 #[derive(Error, Debug)]
 pub enum FormattingError {
@@ -51,11 +51,14 @@ impl GuestMMR {
 
     pub fn append(&mut self, value: String) -> Result<AppendResult, MMRError> {
         let elements_count = self.elements_count;
+        println!("elements_count: {}", elements_count);
 
-        let mut peaks = self.retrieve_peaks_hashes(find_peaks(elements_count))?;
+        let mut peaks: Vec<String> = self.retrieve_peaks_hashes(find_peaks(elements_count))?;
+        println!("peaks: {:?}", peaks);
 
         let mut last_element_idx = self.elements_count + 1;
         let leaf_element_index = last_element_idx;
+        println!("leaf_element_index: {}", leaf_element_index);
 
         // Store the new leaf in the hash map
         self.hashes.insert(last_element_idx, value.clone());
@@ -63,7 +66,7 @@ impl GuestMMR {
         peaks.push(value);
 
         let no_merges = leaf_count_to_append_no_merges(self.leaves_count);
-
+        println!("no_merges: {}", no_merges);
         for _ in 0..no_merges {
             if peaks.len() < 2 {
                 return Err(MMRError::InsufficientPeaksForMerge);
@@ -73,9 +76,13 @@ impl GuestMMR {
 
             // Pop the last two peaks to merge
             let right_hash = peaks.pop().unwrap();
+            println!("right_hash: {}", right_hash);
             let left_hash = peaks.pop().unwrap();
+            println!("left_hash: {}", left_hash);
 
             let parent_hash = hash(vec![left_hash, right_hash])?;
+            println!("parent_hash: {}", parent_hash);
+
             self.hashes.insert(last_element_idx, parent_hash.clone());
 
             peaks.push(parent_hash);
@@ -85,7 +92,11 @@ impl GuestMMR {
         self.leaves_count += 1;
 
         let bag = self.bag_the_peaks()?;
+        println!("bag: {}", bag);
+
         let root_hash = self.calculate_root_hash(&bag, last_element_idx)?;
+        println!("last_element_idx: {}", last_element_idx);
+        println!("root_hash: {}", root_hash);
 
         Ok(AppendResult {
             leaves_count: self.leaves_count,
@@ -124,9 +135,12 @@ impl GuestMMR {
                 let second_last = peaks_hashes.pop_back().unwrap();
                 let root0 = hash(vec![second_last, last])?;
 
-                let final_root = peaks_hashes.into_iter().rev().fold(root0, |prev: String, cur: String| {
-                    hash(vec![cur, prev]).unwrap()
-                });
+                let final_root = peaks_hashes
+                    .into_iter()
+                    .rev()
+                    .fold(root0, |prev: String, cur: String| {
+                        hash(vec![cur, prev]).unwrap()
+                    });
 
                 Ok(final_root)
             }
@@ -163,7 +177,6 @@ impl GuestMMR {
         }
     }
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Proof {
@@ -258,4 +271,166 @@ fn hash(data: Vec<String>) -> Result<String, MMRError> {
     // }
     let hash = format!("0x{}", hash);
     Ok(hash)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use guest_types::{PeaksFormattingOptions, PeaksOptions};
+
+    #[test]
+    fn test_guest_mmr_initialization() {
+        let initial_peaks = vec!["0xabc".to_string(), "0xdef".to_string()];
+        let elements_count = 3;
+        let leaves_count = 2;
+        let guest_mmr = GuestMMR::new(initial_peaks.clone(), elements_count, leaves_count);
+
+        // Check elements and leaves count
+        assert_eq!(guest_mmr.get_elements_count(), elements_count);
+        assert_eq!(guest_mmr.get_leaves_count(), leaves_count);
+
+        // Check initial peaks are stored correctly
+        let peak_positions = find_peaks(elements_count);
+        for (peak, pos) in initial_peaks.iter().zip(peak_positions) {
+            assert_eq!(guest_mmr.hashes.get(&pos).unwrap(), peak);
+        }
+    }
+
+    #[test]
+    fn test_guest_mmr_append() {
+        // Initialize an empty GuestMMR
+        let initial_peaks = vec![];
+        let elements_count = 0;
+        let leaves_count = 0;
+        let mut guest_mmr = GuestMMR::new(initial_peaks, elements_count, leaves_count);
+
+        // Append a value
+        let value = "0x123".to_string();
+        let append_result = guest_mmr.append(value.clone()).expect("Append failed");
+        // Check counts
+        assert_eq!(guest_mmr.get_elements_count(), 1);
+        assert_eq!(guest_mmr.get_leaves_count(), 1);
+
+        // Check the new element is stored
+        assert_eq!(guest_mmr.hashes.get(&1).unwrap(), &value);
+
+        // Verify append result
+        assert_eq!(append_result.leaves_count, 1);
+        assert_eq!(append_result.elements_count, 1);
+        assert_eq!(append_result.element_index, 1);
+
+        // Verify root hash
+        let expected_bag = guest_mmr.bag_the_peaks().expect("Bag the peaks failed");
+        let expected_root_hash = guest_mmr
+            .calculate_root_hash(&expected_bag, guest_mmr.get_elements_count())
+            .expect("Calculate root hash failed");
+        assert_eq!(append_result.root_hash, expected_root_hash);
+    }
+
+    #[test]
+    fn test_guest_mmr_get_peaks() {
+        // Initialize GuestMMR and append elements
+        let initial_peaks = vec![];
+        let elements_count = 0;
+        let leaves_count = 0;
+        let mut guest_mmr = GuestMMR::new(initial_peaks, elements_count, leaves_count);
+
+        guest_mmr
+            .append("0x6c17009d66e34c1d6b7e4d73fd5a105243feb10c7cae9598d60b0fa97d08868".to_string())
+            .expect("Append failed");
+        guest_mmr
+            .append("0x4998b07fef69c1b1658fcb44d44fa5bb0ca62c835b26fe763ca14b61a6595da".to_string())
+            .expect("Append failed");
+        guest_mmr
+            .append("0x7337cf1262bf9eeaecffe02776fa1cc9fd35c6fc49303a2b5f39d96a7b46afa".to_string())
+            .expect("Append failed");
+        guest_mmr
+            .append("0x16fa2f065f204a16db293c9adf370da4e08eea45874692dfa00123b21bbfe81".to_string())
+            .expect("Append failed");
+        // Get peaks
+        let peaks_options = PeaksOptions {
+            elements_count: None,
+            formatting_opts: None,
+        };
+        let peaks = guest_mmr
+            .get_peaks(peaks_options)
+            .expect("Get peaks failed");
+        println!("peaks: {:?}", peaks);
+
+        // Expected peaks
+        let peaks_indices = find_peaks(guest_mmr.get_elements_count());
+        let expected_peaks = guest_mmr
+            .retrieve_peaks_hashes(peaks_indices)
+            .expect("Retrieve peaks hashes failed");
+
+        assert_eq!(peaks, expected_peaks);
+    }
+
+    #[test]
+    fn test_guest_mmr_bag_the_peaks() {
+        // Initialize GuestMMR and append elements
+        let initial_peaks = vec![];
+        let elements_count = 0;
+        let leaves_count = 0;
+        let mut guest_mmr = GuestMMR::new(initial_peaks, elements_count, leaves_count);
+
+        guest_mmr
+            .append("0x6c17009d66e34c1d6b7e4d73fd5a105243feb10c7cae9598d60b0fa97d08868".to_string())
+            .expect("Append failed");
+        guest_mmr
+            .append("0x4998b07fef69c1b1658fcb44d44fa5bb0ca62c835b26fe763ca14b61a6595da".to_string())
+            .expect("Append failed");
+        guest_mmr
+            .append("0x7337cf1262bf9eeaecffe02776fa1cc9fd35c6fc49303a2b5f39d96a7b46afa".to_string())
+            .expect("Append failed");
+        guest_mmr
+            .append("0x16fa2f065f204a16db293c9adf370da4e08eea45874692dfa00123b21bbfe81".to_string())
+            .expect("Append failed");
+
+        // Bag the peaks
+        let bag = guest_mmr.bag_the_peaks().expect("Bag the peaks failed");
+        println!("bag: {:?}", bag);
+
+        // Calculate root hash
+        let root_hash = guest_mmr
+            .calculate_root_hash(&bag, guest_mmr.get_elements_count())
+            .expect("Calculate root hash failed");
+        println!("root_hash: {:?}", root_hash);
+        // Verify root hash is not empty
+        assert!(!root_hash.is_empty());
+    }
+
+    #[test]
+    fn test_format_peaks() {
+        let peaks = vec!["0x1".to_string(), "0x2".to_string()];
+        let formatting_opts = PeaksFormattingOptions {
+            output_size: 4,
+            null_value: "0x0".to_string(),
+        };
+
+        let formatted_peaks =
+            format_peaks(peaks.clone(), &formatting_opts).expect("Format peaks failed");
+
+        let expected_peaks = vec![
+            "0x1".to_string(),
+            "0x2".to_string(),
+            "0x0".to_string(),
+            "0x0".to_string(),
+        ];
+
+        assert_eq!(formatted_peaks, expected_peaks);
+    }
+
+    #[test]
+    fn test_format_peaks_error() {
+        let peaks = vec!["0x1".to_string(), "0x2".to_string(), "0x3".to_string()];
+        let formatting_opts = PeaksFormattingOptions {
+            output_size: 2,
+            null_value: "0x0".to_string(),
+        };
+
+        let result = format_peaks(peaks, &formatting_opts);
+
+        assert!(matches!(result, Err(FormattingError::PeaksOutputSizeError)));
+    }
 }

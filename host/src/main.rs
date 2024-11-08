@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
     // Initialize accumulator builder
     let current_dir = ensure_directory_exists("db-instances")?;
     let store_path = create_database_file(&current_dir, 0)?;
-    let mut builder = AccumulatorBuilder::new(&store_path, proof_generator, 4).await?;
+    let mut builder = AccumulatorBuilder::new(&store_path, proof_generator, 1024).await?;
 
     // Build accumulator from finalized block to genesis
     let results = builder.build_from_finalized().await?;

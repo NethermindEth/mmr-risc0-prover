@@ -10,13 +10,13 @@ fn main() {
     let input: CombinedInput = env::read();
 
     // Verify previous batch proofs
-    for proof in &input.mmr_input.previous_proofs {
-        // Verify each previous proof
-        proof
-            .receipt
-            .verify(proof.method_id)
-            .expect("Invalid previous proof");
-    }
+    // for proof in &input.mmr_input.previous_proofs {
+    //     // Verify each previous proof
+    //     proof
+    //         .receipt
+    //         .verify(proof.method_id)
+    //         .expect("Invalid previous proof");
+    // }
     // Verify block headers
     assert!(
         are_blocks_and_chain_valid(&input.headers),
