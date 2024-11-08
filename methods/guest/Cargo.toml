@@ -1,11 +1,12 @@
 [package]
-name = "method"
+name = "mmr-guest"
 version = "0.1.0"
 edition = "2021"
 
 [workspace]
 
 [dependencies]
+guest-types= {path = "../../guest-types"}
 risc0-zkvm = { version = "1.1.2", default-features = false, features = ['std'] }
 block-validity = { path = "/home/ametel/source/fossil-offchain-processor/crates/block-validity" }
 serde = { version = "1.0", features = ["derive"] }

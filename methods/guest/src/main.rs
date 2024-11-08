@@ -1,27 +1,27 @@
 // main.rs
+use block_validity::utils::are_blocks_and_chain_valid;
 use risc0_zkvm::guest::env;
-use block_validity::{BlockHeader, utils::are_blocks_and_chain_valid};
-use serde::{Serialize, Deserialize};
 mod guest_mmr;
-use guest_mmr::{GuestMMR, GuestInput, GuestOutput};
-
-#[derive(Debug, Serialize, Deserialize)]
-struct CombinedInput {
-    headers: Vec<BlockHeader>,
-    mmr_input: GuestInput,
-}
+use guest_mmr::GuestMMR;
+use guest_types::{CombinedInput, GuestOutput};
 
 fn main() {
     // Read combined input
     let input: CombinedInput = env::read();
-    
-    // Verify block headers
-    assert!(are_blocks_and_chain_valid(&input.headers), "Invalid block headers");
 
-    println!("Creating MMR with:");
-    println!("Initial peaks: {:?}", input.mmr_input.initial_peaks);
-    println!("Initial elements count: {}", input.mmr_input.elements_count);
-    println!("Initial leaves count: {}", input.mmr_input.leaves_count);
+    // Verify previous batch proofs
+    for proof in &input.mmr_input.previous_proofs {
+        // Verify each previous proof
+        proof
+            .receipt
+            .verify(proof.method_id)
+            .expect("Invalid previous proof");
+    }
+    // Verify block headers
+    assert!(
+        are_blocks_and_chain_valid(&input.headers),
+        "Invalid block headers"
+    );
 
     // Initialize MMR with previous state
     let mut mmr = GuestMMR::new(
@@ -33,19 +33,13 @@ fn main() {
     let mut append_results = Vec::new();
 
     // Append block hashes to MMR
-    for (i, header) in input.headers.iter().enumerate() {
-        println!("Appending block {} with hash: {}", i, header.block_hash);
+    for (_, header) in input.headers.iter().enumerate() {
         let block_hash = header.block_hash.clone();
         match mmr.append(block_hash) {
             Ok(result) => {
-                println!("Append successful:");
-                println!("  Element index: {}", result.element_index);
-                println!("  Elements count: {}", result.elements_count);
-                println!("  Leaves count: {}", result.leaves_count);
                 append_results.push(result);
-            },
+            }
             Err(e) => {
-                println!("Error during append: {:?}", e);
                 assert!(false, "MMR append failed: {:?}", e);
             }
         }
@@ -55,7 +49,6 @@ fn main() {
     let final_peaks = match mmr.get_peaks(Default::default()) {
         Ok(peaks) => peaks,
         Err(e) => {
-            println!("Error getting peaks: {:?}", e);
             assert!(false, "Failed to get final peaks: {:?}", e);
             vec![] // This line will never be reached due to assert
         }

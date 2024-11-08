@@ -10,6 +10,7 @@ use starknet::{
     providers::{jsonrpc::HttpTransport, JsonRpcClient, Provider, Url},
 };
 use starknet_crypto::Felt;
+use tracing::info;
 
 pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Felt>> {
     dotenv().ok();
@@ -25,7 +26,7 @@ pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Fe
         env::var("VERIFIER_ADDRESS").expect("VERIFIER_ADDRESS should be provided as env vars.");
     let contract_address =
         Felt::from_hex(&verifier_address_from_env).expect("Invalid verifier address provided");
-    println!("contract_address: {:?}", contract_address);
+    info!("contract_address: {:?}", contract_address);
 
     let result = provider
         .call(
