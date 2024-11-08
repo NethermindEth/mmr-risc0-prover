@@ -9,7 +9,7 @@ use mmr_accumulator::{
     ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, MMR,
 };
 use store::{SqlitePool, SubKey};
-use tracing::{info, debug};
+use tracing::{debug, info};
 
 pub struct AccumulatorBuilder {
     batch_size: u64,
@@ -180,6 +180,38 @@ impl AccumulatorBuilder {
         }
 
         Ok(())
+    }
+
+    /// Build the MMR using a specified number of batches
+    pub async fn build_with_num_batches(&mut self, num_batches: u64) -> Result<Vec<BatchResult>> {
+        let (finalized_block_number, _) = get_finalized_block_hash().await?;
+        self.total_batches = num_batches;
+        self.current_batch = 0;
+        self.previous_proofs.clear();
+
+        let mut batch_results = Vec::new();
+        let mut current_end = finalized_block_number;
+
+        for _ in 0..num_batches {
+            if current_end == 0 {
+                break;
+            }
+
+            let start_block = current_end.saturating_sub(self.batch_size as u64 - 1);
+            info!(
+                "Processing batch {}/{}: {} to {}",
+                self.current_batch + 1,
+                self.total_batches,
+                start_block,
+                current_end
+            );
+
+            let result = self.process_batch(start_block, current_end).await?;
+            batch_results.push(result);
+            current_end = start_block.saturating_sub(1);
+        }
+
+        Ok(batch_results)
     }
 
     pub async fn build_from_finalized(&mut self) -> Result<Vec<BatchResult>> {
