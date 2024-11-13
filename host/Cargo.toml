@@ -3,6 +3,14 @@ name = "host"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "host"
+path = "src/lib.rs"
+
+[[bin]]
+name = "host"
+path = "bin/main.rs"
+
 [dependencies]
 guest-types = { path = "../guest-types" }
 

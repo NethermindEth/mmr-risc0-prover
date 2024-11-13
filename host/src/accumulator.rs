@@ -6,7 +6,7 @@ use eyre::Result;
 use guest_types::{BatchProof, CombinedInput, GuestInput, GuestOutput};
 use mmr::{find_peaks, PeaksOptions};
 use mmr_accumulator::{
-    ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, MMR,
+    ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, BlockHeader, MMR,
 };
 use store::{SqlitePool, SubKey};
 use tracing::{debug, info};
@@ -240,5 +240,42 @@ impl AccumulatorBuilder {
         }
 
         Ok(batch_results)
+    }
+
+    /// Update the MMR with new block headers
+    pub async fn update_mmr_with_new_headers(
+        &mut self,
+        new_headers: Vec<BlockHeader>,
+    ) -> Result<()> {
+        // Fetch the current MMR state
+        let current_peaks = self.mmr.get_peaks(PeaksOptions::default()).await?;
+        let current_elements_count = self.mmr.elements_count.get().await?;
+        let current_leaves_count = self.mmr.leaves_count.get().await?;
+
+        // Prepare guest input for the new headers
+        let mmr_input = GuestInput {
+            initial_peaks: current_peaks.clone(),
+            elements_count: current_elements_count,
+            leaves_count: current_leaves_count,
+            new_elements: new_headers.iter().map(|h| h.block_hash.clone()).collect(),
+            previous_proofs: self.previous_proofs.clone(),
+        };
+
+        // Generate Groth16 proof for the update
+        let combined_input = CombinedInput {
+            headers: new_headers.clone(),
+            mmr_input,
+        };
+
+        let proof = self
+            .proof_generator
+            .generate_groth16_proof(&combined_input)
+            .await?;
+        let guest_output: GuestOutput = self.proof_generator.decode_journal(&proof)?;
+
+        // Update the MMR state
+        self.update_mmr_state(&guest_output).await?;
+
+        Ok(())
     }
 }
