@@ -1,12 +1,8 @@
-mod accumulator;
-mod proof_generator;
-mod types;
-use accumulator::AccumulatorBuilder;
 use clap::Parser;
 use eyre::Result;
+use host::{AccumulatorBuilder, ProofGenerator, ProofType};
 use methods::{MMR_GUEST_ELF, MMR_GUEST_ID};
 use mmr_accumulator::processor_utils::{create_database_file, ensure_directory_exists};
-use proof_generator::{ProofGenerator, ProofType};
 use starknet_handler::verify_groth16_proof_onchain;
 use tracing::info;
 
