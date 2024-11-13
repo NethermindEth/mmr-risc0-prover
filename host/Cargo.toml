@@ -14,8 +14,10 @@ path = "bin/main.rs"
 [dependencies]
 guest-types = { path = "../guest-types" }
 
-db-access = { path = "/home/ametel/source/fossil-offchain-processor/crates/db-access" }
-mmr-accumulator = { path = "/home/ametel/source/fossil-offchain-processor/crates/mmr-accumulator" }
+# db-access = { path = "/home/ametel/source/fossil-offchain-processor/crates/db-access" }
+# mmr-accumulator = { path = "/home/ametel/source/fossil-offchain-processor/crates/mmr-accumulator" }
+mmr-accumulator = { git = "https://github.com/OilerNetwork/fossil-offchain-processor.git", branch = "block-validity-deps-segregation" }
+db-access = { git = "https://github.com/OilerNetwork/fossil-offchain-processor.git", branch = "block-validity-deps-segregation" }
 mmr = { git = "https://github.com/ametel01/rust-accumulators.git", branch = "workspace" }
 store = { git = "https://github.com/ametel01/rust-accumulators.git", branch = "workspace" }
 # mmr = { path = "/home/ametel/source/rust-accumulators/crates/mmr" }
