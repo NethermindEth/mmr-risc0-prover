@@ -10,9 +10,8 @@ starknet = "2.8.4"
 [dev-dependencies]
 snforge_std = "0.32.0"
 
-[cairo]
-sierra-replace-ids = false
-
 [[target.starknet-contract]]
 casm = true
 casm-add-pythonic-hints = true
+
+[lib]

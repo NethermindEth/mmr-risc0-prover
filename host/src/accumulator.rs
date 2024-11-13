@@ -8,6 +8,7 @@ use mmr::{find_peaks, PeaksOptions};
 use mmr_accumulator::{
     ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, BlockHeader, MMR,
 };
+use starknet_crypto::Felt;
 use store::{SqlitePool, SubKey};
 use tracing::{debug, info};
 
@@ -246,7 +247,7 @@ impl AccumulatorBuilder {
     pub async fn update_mmr_with_new_headers(
         &mut self,
         new_headers: Vec<BlockHeader>,
-    ) -> Result<()> {
+    ) -> Result<(Vec<Felt>, String)> {
         // Fetch the current MMR state
         let current_peaks = self.mmr.get_peaks(PeaksOptions::default()).await?;
         let current_elements_count = self.mmr.elements_count.get().await?;
@@ -271,11 +272,26 @@ impl AccumulatorBuilder {
             .proof_generator
             .generate_groth16_proof(&combined_input)
             .await?;
+
+        // Decode and extract the guest output from the proof
         let guest_output: GuestOutput = self.proof_generator.decode_journal(&proof)?;
 
         // Update the MMR state
         self.update_mmr_state(&guest_output).await?;
 
-        Ok(())
+        let elements_count = self.mmr.elements_count.get().await?;
+
+        let bags = self.mmr.bag_the_peaks(Some(elements_count)).await?;
+
+        let new_mmr_root_hash = self.mmr.calculate_root_hash(&bags, elements_count)?;
+
+        // Extract the `calldata` from the `Groth16` proof
+        if let ProofType::Groth16 { calldata, .. } = proof {
+            Ok((calldata, new_mmr_root_hash))
+        } else {
+            Err(eyre::eyre!(
+                "Expected Groth16 proof but got a different proof type"
+            ))
+        }
     }
 }

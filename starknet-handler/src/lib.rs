@@ -1,7 +1,4 @@
-use std::env;
-
 use anyhow::Result;
-use dotenv::dotenv;
 use starknet::{
     core::{
         types::{BlockId, BlockTag, FunctionCall},
@@ -12,20 +9,17 @@ use starknet::{
 use starknet_crypto::Felt;
 use tracing::info;
 
-pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Felt>> {
-    dotenv().ok();
-
-    let rpc_url =
-        env::var("STARKNET_RPC_URL").expect("STARKNET_RPC_URL should be provided as env vars.");
-
+pub async fn verify_groth16_proof_onchain(
+    rpc_url: &str,
+    verifier_address: &str,
+    calldata: &Vec<Felt>,
+) -> Result<Vec<Felt>> {
     let provider = JsonRpcClient::new(HttpTransport::new(
-        Url::parse(&rpc_url).expect("Invalid rpc url provided"),
+        Url::parse(rpc_url).expect("Invalid RPC URL provided"),
     ));
 
-    let verifier_address_from_env =
-        env::var("VERIFIER_ADDRESS").expect("VERIFIER_ADDRESS should be provided as env vars.");
     let contract_address =
-        Felt::from_hex(&verifier_address_from_env).expect("Invalid verifier address provided");
+        Felt::from_hex(verifier_address).expect("Invalid verifier address provided");
     info!("contract_address: {:?}", contract_address);
 
     let result = provider
@@ -38,7 +32,7 @@ pub async fn verify_groth16_proof_onchain(calldata: &Vec<Felt>) -> Result<Vec<Fe
             BlockId::Tag(BlockTag::Latest),
         )
         .await
-        .expect("failed to call contract");
+        .expect("Failed to call contract");
 
     Ok(result)
 }
