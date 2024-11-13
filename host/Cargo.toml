@@ -13,19 +13,16 @@ path = "bin/main.rs"
 
 [dependencies]
 guest-types = { path = "../guest-types" }
+starknet-handler = { path = "../starknet-handler" }
+methods = { path = "../methods" }
 
-# db-access = { path = "/home/ametel/source/fossil-offchain-processor/crates/db-access" }
-# mmr-accumulator = { path = "/home/ametel/source/fossil-offchain-processor/crates/mmr-accumulator" }
+garaga_rs = { git = "https://github.com/ametel01/garaga.git" }
 mmr-accumulator = { git = "https://github.com/OilerNetwork/fossil-offchain-processor.git", branch = "block-validity-deps-segregation" }
 db-access = { git = "https://github.com/OilerNetwork/fossil-offchain-processor.git", branch = "block-validity-deps-segregation" }
 mmr = { git = "https://github.com/ametel01/rust-accumulators.git", branch = "workspace" }
 store = { git = "https://github.com/ametel01/rust-accumulators.git", branch = "workspace" }
-# mmr = { path = "/home/ametel/source/rust-accumulators/crates/mmr" }
-# store = { path = "/home/ametel/source/rust-accumulators/crates/store" }
-garaga_rs = { git = "https://github.com/ametel01/garaga.git" }
-starknet-handler = { path = "../starknet-handler" }
 
-methods = { path = "../methods" }
+
 risc0-zkvm = { version = "1.1.2" }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 serde = "1.0"
