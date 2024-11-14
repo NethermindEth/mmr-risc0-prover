@@ -11,6 +11,7 @@ use starknet_crypto::Felt;
 use starknet_handler::verify_groth16_proof_onchain;
 use tracing::info;
 
+#[tokio::main]
 pub async fn update_mmr_and_verify_onchain(
     db_file: &str,          // Path to the existing SQLite database file
     start_block: u64,       // Start block to update the MMR
