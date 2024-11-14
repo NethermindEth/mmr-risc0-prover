@@ -1,9 +1,8 @@
 use clap::Parser;
 use dotenv::dotenv;
 use eyre::Result;
-use host::{AccumulatorBuilder, ProofGenerator, ProofType};
+use host::{get_store_path, AccumulatorBuilder, ProofGenerator, ProofType};
 use methods::{MMR_GUEST_ELF, MMR_GUEST_ID};
-use mmr_accumulator::processor_utils::{create_database_file, ensure_directory_exists};
 use starknet_handler::verify_groth16_proof_onchain;
 use std::env;
 use tracing::info;
@@ -42,19 +41,7 @@ async fn main() -> Result<()> {
     // Parse CLI arguments
     let args = Args::parse();
 
-    // Load the database file path from the environment or use the provided argument
-    let store_path = if let Some(db_file) = &args.db_file {
-        db_file.clone()
-    } else {
-        // Check for DB_FILE environment variable
-        if let Ok(env_db_file) = env::var("DB_FILE") {
-            env_db_file
-        } else {
-            // Otherwise, create a new database file
-            let current_dir = ensure_directory_exists("db-instances")?;
-            create_database_file(&current_dir, 0)?
-        }
-    };
+    let store_path = get_store_path(args.db_file).expect("Failed to get store path");
 
     info!("Initializing proof generator...");
     // Initialize proof generator

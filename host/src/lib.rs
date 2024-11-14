@@ -5,13 +5,13 @@ pub mod types;
 pub use accumulator::AccumulatorBuilder;
 use eyre::Result;
 use methods::{MMR_GUEST_ELF, MMR_GUEST_ID};
+use mmr_accumulator::processor_utils::{create_database_file, ensure_directory_exists};
 // use mmr_accumulator::BlockHeader;
 pub use proof_generator::{ProofGenerator, ProofType};
 use starknet_crypto::Felt;
 use starknet_handler::verify_groth16_proof_onchain;
 use tracing::info;
 
-#[tokio::main]
 pub async fn update_mmr_and_verify_onchain(
     db_file: &str,          // Path to the existing SQLite database file
     start_block: u64,       // Start block to update the MMR
@@ -43,4 +43,17 @@ pub async fn update_mmr_and_verify_onchain(
     let verified = verification_result[0] == Felt::from(1);
 
     Ok((verified, new_mmr_root_hash))
+}
+
+pub fn get_store_path(db_file: Option<String>) -> Result<String> {
+    // Load the database file path from the environment or use the provided argument
+    let store_path = if let Some(db_file) = db_file {
+        db_file.clone()
+    } else {
+        // Otherwise, create a new database file
+        let current_dir = ensure_directory_exists("db-instances")?;
+        create_database_file(&current_dir, 0)?
+    };
+
+    Ok(store_path)
 }

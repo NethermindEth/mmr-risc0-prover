@@ -8,8 +8,12 @@ name = "host"
 path = "src/lib.rs"
 
 [[bin]]
-name = "host"
-path = "bin/main.rs"
+name = "update_mmr"
+path = "bin/update_mmr.rs"
+
+[[bin]]
+name = "build_mmr"
+path = "bin/build_mmr.rs"
 
 [dependencies]
 guest-types = { path = "../guest-types" }
