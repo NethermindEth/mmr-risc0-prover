@@ -18,7 +18,7 @@ pub enum ProofType {
 pub struct BatchResult {
     pub start_block: u64,
     pub end_block: u64,
-    // pub mmr_state: MMRState,
+    pub new_mmr_root_hash: String,
     pub proof: Option<ProofType>,
 }
 

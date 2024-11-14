@@ -6,7 +6,7 @@ use eyre::Result;
 use guest_types::{BatchProof, CombinedInput, GuestInput, GuestOutput};
 use mmr::{find_peaks, PeaksOptions};
 use mmr_accumulator::{
-    ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, BlockHeader, MMR,
+    ethereum::get_finalized_block_hash, processor_utils::*, store::StoreManager, MMR,
 };
 use starknet_crypto::Felt;
 use store::{SqlitePool, SubKey};
@@ -88,7 +88,7 @@ impl AccumulatorBuilder {
 
         // Decode and update state
         let guest_output: GuestOutput = self.proof_generator.decode_journal(&proof)?;
-        self.update_mmr_state(&guest_output).await?;
+        let new_mmr_root_hash = self.update_mmr_state(&guest_output).await?;
 
         // If this is a STARK proof, add it to previous_proofs for the next batch
         if let ProofType::Stark {
@@ -117,11 +117,12 @@ impl AccumulatorBuilder {
         Ok(BatchResult {
             start_block,
             end_block,
+            new_mmr_root_hash,
             proof: Some(proof),
         })
     }
 
-    async fn update_mmr_state(&mut self, guest_output: &GuestOutput) -> Result<()> {
+    async fn update_mmr_state(&mut self, guest_output: &GuestOutput) -> Result<String> {
         info!("Guest output: {:?}", guest_output);
         // Verify state transition
         let current_elements_count = self.mmr.elements_count.get().await?;
@@ -180,7 +181,13 @@ impl AccumulatorBuilder {
             return Err(eyre::eyre!("Failed to verify stored peaks after update"));
         }
 
-        Ok(())
+        let bag = self.mmr.bag_the_peaks(None).await?;
+
+        let new_mmr_root_hash = self
+            .mmr
+            .calculate_root_hash(&bag, self.mmr.elements_count.get().await?)?;
+
+        Ok(new_mmr_root_hash)
     }
 
     /// Build the MMR using a specified number of batches
@@ -246,55 +253,14 @@ impl AccumulatorBuilder {
     /// Update the MMR with new block headers
     pub async fn update_mmr_with_new_headers(
         &mut self,
-        new_headers: Vec<BlockHeader>,
+        start_block: u64,
+        end_block: u64,
     ) -> Result<(Vec<Felt>, String)> {
-        info!("Updating MMR with {} new block headers", new_headers.len());
-        // Fetch the current MMR state
-        let current_peaks = self.mmr.get_peaks(PeaksOptions::default()).await?;
-        info!("Current MMR state: {:?}", current_peaks);
-        let current_elements_count = self.mmr.elements_count.get().await?;
-        info!("Current elements count: {}", current_elements_count);
-        let current_leaves_count = self.mmr.leaves_count.get().await?;
-        info!("Current leaves count: {}", current_leaves_count);
-
-        // Prepare guest input for the new headers
-        let mmr_input = GuestInput {
-            initial_peaks: current_peaks.clone(),
-            elements_count: current_elements_count,
-            leaves_count: current_leaves_count,
-            new_elements: new_headers.iter().map(|h| h.block_hash.clone()).collect(),
-            previous_proofs: self.previous_proofs.clone(),
-        };
-
-        // Generate Groth16 proof for the update
-        let combined_input = CombinedInput {
-            headers: new_headers.clone(),
-            mmr_input,
-        };
-
-        let proof = self
-            .proof_generator
-            .generate_groth16_proof(&combined_input)
-            .await?;
-
-        info!("Generated Groth16 proof");
-        // Decode and extract the guest output from the proof
-        let guest_output: GuestOutput = self.proof_generator.decode_journal(&proof)?;
-
-        // Update the MMR state
-        self.update_mmr_state(&guest_output).await?;
-        info!("Updated SQLite MMR state");
-
-        let elements_count = self.mmr.elements_count.get().await?;
-
-        let bags = self.mmr.bag_the_peaks(Some(elements_count)).await?;
-
-        let new_mmr_root_hash = self.mmr.calculate_root_hash(&bags, elements_count)?;
-        info!("Calculated new MMR root hash {}", new_mmr_root_hash);
+        let result = self.process_batch(start_block, end_block).await?;
 
         // Extract the `calldata` from the `Groth16` proof
-        if let ProofType::Groth16 { calldata, .. } = proof {
-            Ok((calldata, new_mmr_root_hash))
+        if let ProofType::Groth16 { calldata, .. } = result.proof.unwrap() {
+            Ok((calldata, result.new_mmr_root_hash))
         } else {
             Err(eyre::eyre!(
                 "Expected Groth16 proof but got a different proof type"

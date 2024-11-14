@@ -5,19 +5,19 @@ pub mod types;
 pub use accumulator::AccumulatorBuilder;
 use eyre::Result;
 use methods::{MMR_GUEST_ELF, MMR_GUEST_ID};
-use mmr_accumulator::BlockHeader;
+// use mmr_accumulator::BlockHeader;
 pub use proof_generator::{ProofGenerator, ProofType};
 use starknet_crypto::Felt;
 use starknet_handler::verify_groth16_proof_onchain;
 use tracing::info;
 
 pub async fn update_mmr_and_verify_onchain(
-    db_file: &str,                 // Path to the existing SQLite database file
-    new_headers: Vec<BlockHeader>, // New block headers to update the MMR
-    rpc_url: &str,                 // RPC URL for Starknet
-    verifier_address: &str,        // Verifier contract address
+    db_file: &str,          // Path to the existing SQLite database file
+    start_block: u64,       // Start block to update the MMR
+    end_block: u64,         // End block to update the MMR
+    rpc_url: &str,          // RPC URL for Starknet
+    verifier_address: &str, // Verifier contract address
 ) -> Result<(bool, String)> {
-    info!("Received request to update MMR with {} new block headers", new_headers.len());
     info!("RPC URL: {}", rpc_url);
     info!("Verifier address: {}", verifier_address);
     info!("Sending headers to Risc0-zkVM...");
@@ -27,10 +27,10 @@ pub async fn update_mmr_and_verify_onchain(
     // Initialize accumulator builder
     let mut builder = AccumulatorBuilder::new(db_file, proof_generator, 0).await?;
 
-    
     // Update the MMR with new block headers and get the proof calldata
-    let (proof_calldata, new_mmr_root_hash) =
-    builder.update_mmr_with_new_headers(new_headers).await?;
+    let (proof_calldata, new_mmr_root_hash) = builder
+        .update_mmr_with_new_headers(start_block, end_block)
+        .await?;
     info!("MMR successfully updated with new block headers");
 
     info!("Verifying proof onchain...");
