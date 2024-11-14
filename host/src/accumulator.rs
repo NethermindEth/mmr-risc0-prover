@@ -256,6 +256,8 @@ impl AccumulatorBuilder {
         start_block: u64,
         end_block: u64,
     ) -> Result<(Vec<Felt>, String)> {
+        self.total_batches = ((end_block - start_block) / self.batch_size as u64) + 1;
+
         let result = self.process_batch(start_block, end_block).await?;
 
         // Extract the `calldata` from the `Groth16` proof
