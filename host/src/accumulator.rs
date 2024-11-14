@@ -279,13 +279,15 @@ impl AccumulatorBuilder {
 
         // Update the MMR state
         self.update_mmr_state(&guest_output).await?;
+        info!("Updated SQLite MMR state");
 
         let elements_count = self.mmr.elements_count.get().await?;
 
         let bags = self.mmr.bag_the_peaks(Some(elements_count)).await?;
 
         let new_mmr_root_hash = self.mmr.calculate_root_hash(&bags, elements_count)?;
-
+        info!("Calculated new MMR root hash {}", new_mmr_root_hash);
+        
         // Extract the `calldata` from the `Groth16` proof
         if let ProofType::Groth16 { calldata, .. } = proof {
             Ok((calldata, new_mmr_root_hash))
