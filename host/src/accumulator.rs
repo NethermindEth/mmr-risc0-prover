@@ -248,10 +248,14 @@ impl AccumulatorBuilder {
         &mut self,
         new_headers: Vec<BlockHeader>,
     ) -> Result<(Vec<Felt>, String)> {
+        info!("Updating MMR with {} new block headers", new_headers.len());
         // Fetch the current MMR state
         let current_peaks = self.mmr.get_peaks(PeaksOptions::default()).await?;
+        info!("Current MMR state: {:?}", current_peaks);
         let current_elements_count = self.mmr.elements_count.get().await?;
+        info!("Current elements count: {}", current_elements_count);
         let current_leaves_count = self.mmr.leaves_count.get().await?;
+        info!("Current leaves count: {}", current_leaves_count);
 
         // Prepare guest input for the new headers
         let mmr_input = GuestInput {
@@ -287,7 +291,7 @@ impl AccumulatorBuilder {
 
         let new_mmr_root_hash = self.mmr.calculate_root_hash(&bags, elements_count)?;
         info!("Calculated new MMR root hash {}", new_mmr_root_hash);
-        
+
         // Extract the `calldata` from the `Groth16` proof
         if let ProofType::Groth16 { calldata, .. } = proof {
             Ok((calldata, new_mmr_root_hash))
