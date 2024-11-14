@@ -64,7 +64,7 @@ impl ProofGenerator {
     /// Generate a Groth16 proof for the final batch
     pub async fn generate_groth16_proof(&self, input: &CombinedInput) -> Result<ProofType> {
         let method_elf = self.method_elf;
-        let method_id = self.method_id;
+        // let method_id = self.method_id;
         let input = input.clone();
 
         info!("Generating Groth16 proof...");

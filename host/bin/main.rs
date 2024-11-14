@@ -26,6 +26,7 @@ struct Args {
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    info!("Starting host...");
     // Load environment variables from .env file
     dotenv().ok();
 
@@ -54,13 +55,16 @@ async fn main() -> Result<()> {
         }
     };
 
+    info!("Initializing proof generator...");
     // Initialize proof generator
     let proof_generator = ProofGenerator::new(MMR_GUEST_ELF, MMR_GUEST_ID);
 
+    info!("Initializing accumulator builder...");
     // Initialize accumulator builder with the batch size
     let mut builder =
         AccumulatorBuilder::new(&store_path, proof_generator, args.batch_size).await?;
 
+    info!("Building MMR...");
     // Build MMR from finalized block to block #0 or up to the specified number of batches
     let results = if let Some(num_batches) = args.num_batches {
         builder.build_with_num_batches(num_batches).await?
@@ -68,6 +72,7 @@ async fn main() -> Result<()> {
         builder.build_from_finalized().await?
     };
 
+    info!("Processing results...");
     // Print results
     for result in &results {
         info!(
@@ -87,6 +92,7 @@ async fn main() -> Result<()> {
             None => info!("No proof generated"),
         }
     }
+    info!("Host finished");
 
     Ok(())
 }
