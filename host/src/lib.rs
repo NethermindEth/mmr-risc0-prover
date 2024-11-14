@@ -17,18 +17,23 @@ pub async fn update_mmr_and_verify_onchain(
     rpc_url: &str,                 // RPC URL for Starknet
     verifier_address: &str,        // Verifier contract address
 ) -> Result<(bool, String)> {
+    info!("Received request to update MMR with {} new block headers", new_headers.len());
+    info!("RPC URL: {}", rpc_url);
+    info!("Verifier address: {}", verifier_address);
+    info!("Sending headers to Risc0-zkVM...");
     // Initialize proof generator
     let proof_generator = ProofGenerator::new(MMR_GUEST_ELF, MMR_GUEST_ID);
 
     // Initialize accumulator builder
     let mut builder = AccumulatorBuilder::new(db_file, proof_generator, 0).await?;
 
-    info!("MMR successfully updated with new block headers");
-
+    
     // Update the MMR with new block headers and get the proof calldata
     let (proof_calldata, new_mmr_root_hash) =
-        builder.update_mmr_with_new_headers(new_headers).await?;
+    builder.update_mmr_with_new_headers(new_headers).await?;
+    info!("MMR successfully updated with new block headers");
 
+    info!("Verifying proof onchain...");
     // Call the verification function with the provided RPC URL and verifier address
     let result = verify_groth16_proof_onchain(rpc_url, verifier_address, &proof_calldata);
 

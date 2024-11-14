@@ -9,6 +9,7 @@ fn main() {
     // Read combined input
     let input: CombinedInput = env::read();
 
+    eprintln!("Risc0-zkVM: received input: {}", input.headers.len());
     // Verify previous batch proofs
     for proof in &input.mmr_input.previous_proofs {
         // Verify each previous proof
@@ -17,11 +18,14 @@ fn main() {
             .verify(proof.method_id)
             .expect("Invalid previous proof");
     }
+
+    eprintln!("Previous proofs are valid");
     // Verify block headers
     assert!(
         are_blocks_and_chain_valid(&input.headers),
         "Invalid block headers"
     );
+    eprintln!("Risc0-zkVM: block headers are valid");
 
     // Initialize MMR with previous state
     let mut mmr = GuestMMR::new(
@@ -32,6 +36,7 @@ fn main() {
 
     let mut append_results = Vec::new();
 
+    eprintln!("Risc0-zkVM: appending block hashes to MMR...");
     // Append block hashes to MMR
     for (_, header) in input.headers.iter().enumerate() {
         let block_hash = header.block_hash.clone();
@@ -45,6 +50,7 @@ fn main() {
         }
     }
 
+    eprintln!("Risc0-zkVM: getting final peaks...");
     // Get final peaks
     let final_peaks = match mmr.get_peaks(Default::default()) {
         Ok(peaks) => peaks,
@@ -54,6 +60,7 @@ fn main() {
         }
     };
 
+    eprintln!("Risc0-zkVM: creating output...");
     // Create output
     let output = GuestOutput {
         final_peaks,
@@ -62,6 +69,7 @@ fn main() {
         append_results,
     };
 
+    eprintln!("Risc0-zkVM: committing output...");
     // Commit the output
     env::commit(&output);
 }
