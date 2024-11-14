@@ -25,7 +25,7 @@ pub async fn update_mmr_and_verify_onchain(
     let proof_generator = ProofGenerator::new(MMR_GUEST_ELF, MMR_GUEST_ID);
 
     // Initialize accumulator builder
-    let mut builder = AccumulatorBuilder::new(db_file, proof_generator, 0).await?;
+    let mut builder = AccumulatorBuilder::new(db_file, proof_generator, 1024).await?;
 
     // Update the MMR with new block headers and get the proof calldata
     let (proof_calldata, new_mmr_root_hash) = builder
