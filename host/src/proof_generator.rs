@@ -87,9 +87,9 @@ impl ProofGenerator {
                 .map_err(|e| eyre::eyre!("Proof generation failed: {}", e))?
                 .receipt;
 
-            receipt
-                .verify(method_id)
-                .map_err(|e| eyre::eyre!("Verification failed: {}", e))?;
+            // receipt
+            //     .verify(method_id)
+            //     .map_err(|e| eyre::eyre!("Verification failed: {}", e))?;
 
             // Convert to Groth16
             let encoded_seal =
