@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["host", "methods", "starknet-handler", "guest-types", "guest_mmr_tests"]
+members = ["host", "methods", "starknet-handler", "guest-types", "guest_mmr_tests", "client", "relayer"]
 
 # Always optimize; building and running the guest takes much longer without optimization.
 [profile.dev]

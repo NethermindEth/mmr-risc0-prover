@@ -1,111 +1,118 @@
-# RISC Zero Rust Starter Template
+<readme>
 
-Welcome to the RISC Zero Rust Starter Template! This template is intended to
-give you a starting point for building a project using the RISC Zero zkVM.
-Throughout the template (including in this README), you'll find comments
-labelled `TODO` in places where you'll need to make changes. To better
-understand the concepts behind this template, check out the [zkVM
-Overview][zkvm-overview].
+# Fossil Light Client Local Testing Setup
 
-## Quick Start
+This README provides instructions for setting up and running the `fossil-light-client` for local testing. These steps will guide you through configuring a simulated Ethereum environment (Anvil), deploying necessary contracts, and initializing a local Starknet development network (Katana) for integrated testing. Each section corresponds to a separate terminal session to keep services organized and running simultaneously.
 
-First, make sure [rustup] is installed. The
-[`rust-toolchain.toml`][rust-toolchain] file will be used by `cargo` to
-automatically install the correct version.
+## Terminal 1: Start Anvil Ethereum Devnet
 
-To build all methods and execute the method within the zkVM, run the following
-command:
+In this terminal, you'll set up an Ethereum development environment using Anvil, which will simulate an Ethereum network locally.
 
-```bash
-cargo run
-```
+1. Navigate to the Ethereum directory:
+   ```bash
+   cd config
+   ```
 
-This is an empty template, and so there is no expected output (until you modify
-the code).
+2. Load the environment variables:
+   ```bash
+   source anvil.env
+   ```
 
-### Executing the Project Locally in Development Mode
+3. Start the Anvil Ethereum development network:
+   ```bash
+   anvil --fork-url $MAINNET_ETH_RPC_URL --auto-impersonate
+   ```
 
-During development, faster iteration upon code changes can be achieved by leveraging [dev-mode], we strongly suggest activating it during your early development phase. Furthermore, you might want to get insights into the execution statistics of your project, and this can be achieved by specifying the environment variable `RUST_LOG="[executor]=info"` before running your project.
+> **Note:** `${MAINNET_ETH_RPC_URL}` should be configured in `anvil.env` to point to the desired RPC provider (e.g., Infura or Alchemy) for forking mainnet data.
 
-Put together, the command to run your project in development mode while getting execution statistics is:
+## Terminal 2: Deploy L1MessageSender.sol
 
-```bash
-RUST_LOG="[executor]=info" RISC0_DEV_MODE=1 cargo run
-```
+In this terminal, you will deploy the `L1MessageSender.sol` contract to the Anvil development network, which is essential for message relaying between Ethereum and Starknet in this testing setup.
 
-### Running Proofs Remotely on Bonsai
+1. Navigate to the Ethereum directory:
+   ```bash
+   cd contracts/ethereum
+   ```
 
-_Note: The Bonsai proving service is still in early Alpha; an API key is
-required for access. [Click here to request access][bonsai access]._
+2. Load the environment variables:
+   ```bash
+   cp ../../config/anvil.env .env
+   source .env
+   ```
 
-If you have access to the URL and API key to Bonsai you can run your proofs
-remotely. To prove in Bonsai mode, invoke `cargo run` with two additional
-environment variables:
+3. Deploy the contract:
+   ```bash
+   forge script script/LocalTesting.s.sol:LocalSetup --broadcast --rpc-url $ANVIL_URL
+   ```
 
-```bash
-BONSAI_API_KEY="YOUR_API_KEY" BONSAI_API_URL="BONSAI_URL" cargo run
-```
+> **Note:** This deployment requires `forge` and should be configured to point to the `ANVIL_URL` as specified in `anvil.env`.
 
-## How to Create a Project Based on This Template
+## Terminal 3: Start Katana Starknet Devnet and Deploy Contracts
 
-Search this template for the string `TODO`, and make the necessary changes to
-implement the required feature described by the `TODO` comment. Some of these
-changes will be complex, and so we have a number of instructional resources to
-assist you in learning how to write your own code for the RISC Zero zkVM:
+In this terminal, you'll initialize Katana, a local Starknet development environment. Katana will work in tandem with Anvil for cross-chain interactions in your testing setup.
 
-- The [RISC Zero Developer Docs][dev-docs] is a great place to get started.
-- Example projects are available in the [examples folder][examples] of
-  [`risc0`][risc0-repo] repository.
-- Reference documentation is available at [https://docs.rs][docs.rs], including
-  [`risc0-zkvm`][risc0-zkvm], [`cargo-risczero`][cargo-risczero],
-  [`risc0-build`][risc0-build], and [others][crates].
+1. Navigate to the Starknet directory:
+   ```bash
+   cd scripts/katana
+   ```
 
-## Directory Structure
+2. Source the environment variables:
+   ```bash
+   source ../../config/katana.env
+   ```
+3. Update the `anvil.messaging.json` file with the correct values for `from_block` taken from the Anvil logs.
+   ```
+   Fork
+   ==================
+   Endpoint:       http://xxx.x.x.x:x
+   Block number:   21168847 <---
+   Block hash:     0x67bc863205b5cd53f11d78bccb7a722db1b598bb24f4e11239598825bfb3e4d3
+   Chain ID:       1
+   ```
 
-It is possible to organize the files for these components in various ways.
-However, in this starter template we use a standard directory structure for zkVM
-applications, which we think is a good starting point for your applications.
+4. Start Katana with messaging integration for Anvil:
+   ```bash
+   katana --messaging ../../config/anvil.messaging.json --disable-fee
+   ```
 
-```text
-project_name
-├── Cargo.toml
-├── host
-│   ├── Cargo.toml
-│   └── src
-│       └── main.rs                    <-- [Host code goes here]
-└── methods
-    ├── Cargo.toml
-    ├── build.rs
-    ├── guest
-    │   ├── Cargo.toml
-    │   └── src
-    │       └── method_name.rs         <-- [Guest code goes here]
-    └── src
-        └── lib.rs
-```
+> **Note:** `--messaging` enables communication between Anvil and Katana, and `--disable-fee` allows for testing without transaction fees.
 
-## Video Tutorial
+## Terminal 4: Deploy Starknet Contracts
 
-For a walk-through of how to build with this template, check out this [excerpt
-from our workshop at ZK HACK III][zkhack-iii].
+In this terminal, you will deploy all necessary Starknet contracts to the Katana development network.
 
-## Questions, Feedback, and Collaborations
+1. Navigate to the Starknet directory:
+   ```bash
+   cd scripts/katana
+   ```
 
-We'd love to hear from you on [Discord][discord] or [Twitter][twitter].
+2. Run the deployment script:
+   ```bash
+   ./deploy.sh
+   ```
 
-[bonsai access]: https://bonsai.xyz/apply
-[cargo-risczero]: https://docs.rs/cargo-risczero
-[crates]: https://github.com/risc0/risc0/blob/main/README.md#rust-binaries
-[dev-docs]: https://dev.risczero.com
-[dev-mode]: https://dev.risczero.com/api/generating-proofs/dev-mode
-[discord]: https://discord.gg/risczero
-[docs.rs]: https://docs.rs/releases/search?query=risc0
-[examples]: https://github.com/risc0/risc0/tree/main/examples
-[risc0-build]: https://docs.rs/risc0-build
-[risc0-repo]: https://www.github.com/risc0/risc0
-[risc0-zkvm]: https://docs.rs/risc0-zkvm
-[rust-toolchain]: rust-toolchain.toml
-[rustup]: https://rustup.rs
-[twitter]: https://twitter.com/risczero
-[zkhack-iii]: https://www.youtube.com/watch?v=Yg_BGqj_6lg&list=PLcPzhUaCxlCgig7ofeARMPwQ8vbuD6hC5&index=5
-[zkvm-overview]: https://dev.risczero.com/zkvm
+> **Note:** Ensure the `deploy.sh` script is configured correctly to deploy the required contracts for testing on Katana.
+>
+
+## Terminal 5: Send Finalized Block Hash to L2
+
+In this terminal, you will send the finalized block hash from the Ethereum network to the Starknet network.
+
+1. Navigate to the Ethereum directory:
+   ```bash
+   cd contracts/ethereum
+   source .env
+   ```
+
+2. Send the finalized block hash to the Starknet network:
+   ```bash
+   forge script script/SendMessage.s.sol:FinalizedBlockHash --broadcast --rpc-url $ANVIL_URL
+   ```
+
+## Next Steps
+
+Once all terminals are set up, your local testing environment should be fully operational. You can now proceed with testing cross-chain messaging or other interactions between the simulated Ethereum and Starknet environments. 
+
+For further customization or troubleshooting, refer to individual configuration files and environment variables in each service directory.
+
+</readme>

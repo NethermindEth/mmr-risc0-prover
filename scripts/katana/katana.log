@@ -1,0 +1,252 @@
+
+
+
+██╗  ██╗ █████╗ ████████╗ █████╗ ███╗   ██╗ █████╗
+██║ ██╔╝██╔══██╗╚══██╔══╝██╔══██╗████╗  ██║██╔══██╗
+█████╔╝ ███████║   ██║   ███████║██╔██╗ ██║███████║
+██╔═██╗ ██╔══██║   ██║   ██╔══██║██║╚██╗██║██╔══██║
+██║  ██╗██║  ██║   ██║   ██║  ██║██║ ╚████║██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+
+
+PREDEPLOYED CONTRACTS
+==================
+
+| Contract        | Fee Token
+| Address         | 0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7
+| Class Hash      | 0x02a8846878b6ad1f54f6ba46f5f40e11cee755c677f130b2c4b60566c9003f1f
+
+| Contract        | Universal Deployer
+| Address         | 0x41a78e741e5af2fec34b695679bc6891742439f7afb8484ecd7766661ad02bf
+| Class Hash      | 0x07b3e05f48f0c69e4a65ce5e076a66271a527aff2c34ce1083ec6e1526997a69
+
+| Contract        | Account Contract
+| Class Hash      | 0x05400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c
+
+
+PREFUNDED ACCOUNTS
+==================
+
+| Account address |  0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca
+| Private key     |  0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a
+| Public key      |  0x640466ebd2ce505209d3e5c4494b4276ed8f1cde764d757eb48831961f7cdea
+
+| Account address |  0xe29882a1fcba1e7e10cad46212257fea5c752a4f9b1b1ec683c503a2cf5c8a
+| Private key     |  0x14d6672dcb4b77ca36a887e9a11cd9d637d5012468175829e9c6e770c61642
+| Public key      |  0x16e375df37a7653038bd9eccd767e780c2c4d4c66b4c85f455236a3fd75673a
+
+| Account address |  0x29873c310fbefde666dc32a1554fea6bb45eecc84f680f8a2b0a8fbb8cb89af
+| Private key     |  0xc5b2fcab997346f3ea1c00b002ecf6f382c5f9c9659a3894eb783c5320f912
+| Public key      |  0x33246ce85ebdc292e6a5c5b4dd51fab2757be34b8ffda847ca6925edf31cb67
+
+| Account address |  0x2d71e9c974539bb3ffb4b115e66a23d0f62a641ea66c4016e903454c8753bbc
+| Private key     |  0x33003003001800009900180300d206308b0070db00121318d17b5e6262150b
+| Public key      |  0x4c0f884b8e5b4f00d97a3aad26b2e5de0c0c76a555060c837da2e287403c01d
+
+| Account address |  0x3ebb4767aae1262f8eb28d9368db5388cfe367f50552a8244123506f0b0bcca
+| Private key     |  0x3e3979c1ed728490308054fe357a9f49cf67f80f9721f44cc57235129e090f4
+| Public key      |  0x1e8965b7d0b20b91a62fe515dd991dc9fcb748acddf6b2cf18cec3bdd0f9f9a
+
+| Account address |  0x541da8f7f3ab8247329d22b3987d1ffb181bc8dc7f9611a6eccec3b0749a585
+| Private key     |  0x736adbbcdac7cc600f89051db1abbc16b9996b46f6b58a9752a11c1028a8ec8
+| Public key      |  0x570258e7277eb345ab80803c1dc5847591efd028916fc826bc7cd47ccd8f20d
+
+| Account address |  0x56c155b624fdf6bfc94f7b37cf1dbebb5e186ef2e4ab2762367cd07c8f892a1
+| Private key     |  0x6bf3604bcb41fed6c42bcca5436eeb65083a982ff65db0dc123f65358008b51
+| Public key      |  0x4b076e402835913e3f6812ed28cef8b757d4643ebf2714471a387cb10f22be3
+
+| Account address |  0x6162896d1d7ab204c7ccac6dd5f8e9e7c25ecd5ae4fcb4ad32e57786bb46e03
+| Private key     |  0x1800000000300000180000000000030000000000003006001800006600
+| Public key      |  0x2b191c2f3ecf685a91af7cf72a43e7b90e2e41220175de5c4f7498981b10053
+
+| Account address |  0x66efb28ac62686966ae85095ff3a772e014e7fbf56d4c5f6fac5606d4dde23a
+| Private key     |  0x283d1e73776cd4ac1ac5f0b879f561bded25eceb2cc589c674af0cec41df441
+| Public key      |  0x73c8a29ba0e6a368422d0551b3f45a30a27166b809ba07a41a1bc434b000ba7
+
+| Account address |  0x6b86e40118f29ebe393a75469b4d926c7a44c2e2681b6d319520b7c1156d114
+| Private key     |  0x1c9053c053edf324aec366a34c6901b1095b07af69495bffec7d7fe21effb1b
+| Public key      |  0x4c339f18b9d1b95b64a6d378abd1480b2e0d5d5bd33cd0828cbce4d65c27284
+
+
+ACCOUNTS SEED
+=============
+0
+    
+[2m2024-11-14T06:17:01.210092Z[0m [32m INFO[0m [2mrpc[0m[2m:[0m RPC server started. [3maddr[0m[2m=[0m127.0.0.1:5050
+[2m2024-11-14T06:17:01.213236Z[0m [32m INFO[0m [2mpipeline[0m[2m:[0m Executing stage. [3mid[0m[2m=[0mSequencing
+[2m2024-11-14T06:17:01.213519Z[0m [32m INFO[0m [1mStage[0m[1m{[0m[3mid[0m[2m=[0mSequencing[1m}[0m[2m:[0m [2mmessaging[0m[2m:[0m Messaging enabled [Ethereum].
+[2m2024-11-14T06:17:03.216083Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:03.554870Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:05.500369Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:07.431574Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:09.446965Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:11.544260Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:13.487556Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:15.504742Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:15.885493Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:15.907590Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getClass"
+[2m2024-11-14T06:17:15.921440Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:15.924936Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:15.925211Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:15.942599Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addDeclareTransaction"
+[2m2024-11-14T06:17:15.953073Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x7bd76196e4542f86731ad158e34b109343ea49736e191f7d409d51ad682661f"
+[2m2024-11-14T06:17:15.955634Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:15.958354Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 3586 | memory holes: 61 | ec_op_builtin: 3 | pedersen_builtin: 16 | range_check_builtin: 65"
+[2m2024-11-14T06:17:15.958570Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m1 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:17.215000Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:17.433249Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:19.433479Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:20.957359Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:21.017931Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:21.018330Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:21.018906Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:21.018994Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:21.023599Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addInvokeTransaction"
+[2m2024-11-14T06:17:21.023966Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x1cc690b98892e198022238af0075799f896b5ec2c2e90f03b003159ca0b6375"
+[2m2024-11-14T06:17:21.026377Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:21.029758Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 8006 | memory holes: 67 | ec_op_builtin: 3 | pedersen_builtin: 30 | range_check_builtin: 148"
+[2m2024-11-14T06:17:21.029764Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Event emitted. [3mkeys[0m[2m=[0m"0x26b160f10156dea0639bec90696772c640b9706a47f5b8c52ea1abe5858b34d"
+[2m2024-11-14T06:17:21.029914Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m2 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:21.215664Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:21.468693Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:23.435116Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:25.463086Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:26.027853Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:26.087601Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:26.126611Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getClass"
+[2m2024-11-14T06:17:26.154337Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:26.161581Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:26.162198Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:26.195327Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addDeclareTransaction"
+[2m2024-11-14T06:17:26.231263Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x43d0c0831cd29343a922bd487e4b2ebcd5485c3b99f36df2111341fbaaa5dbe"
+[2m2024-11-14T06:17:26.236350Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:26.240759Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 3586 | memory holes: 61 | ec_op_builtin: 3 | pedersen_builtin: 16 | range_check_builtin: 65"
+[2m2024-11-14T06:17:26.241194Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m3 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:27.215048Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:27.516462Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:29.454702Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:31.238837Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:31.300056Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:31.300490Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:31.301100Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:31.301183Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:31.306722Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addInvokeTransaction"
+[2m2024-11-14T06:17:31.307155Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x763adfe0e5c8540a74ad787b7453f9bb240167f979078c22ff18d2e4799099a"
+[2m2024-11-14T06:17:31.309816Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:31.314047Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 8490 | memory holes: 72 | ec_op_builtin: 3 | pedersen_builtin: 32 | range_check_builtin: 163"
+[2m2024-11-14T06:17:31.314054Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Event emitted. [3mkeys[0m[2m=[0m"0x26b160f10156dea0639bec90696772c640b9706a47f5b8c52ea1abe5858b34d"
+[2m2024-11-14T06:17:31.314204Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m4 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:31.520028Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:33.214854Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:33.436422Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:35.605875Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:36.311313Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:36.371960Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:36.896161Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getClass"
+[2m2024-11-14T06:17:37.396614Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:37.487386Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:37.533108Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:37.551018Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:38.060147Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addDeclareTransaction"
+[2m2024-11-14T06:17:38.458841Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x35f0add5b84edc952a607255e72a9de2773035ea9a18743387aa1927c2932fc"
+[2m2024-11-14T06:17:38.470108Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:38.496494Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 3586 | memory holes: 61 | ec_op_builtin: 3 | pedersen_builtin: 16 | range_check_builtin: 65"
+[2m2024-11-14T06:17:38.499770Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m5 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:39.215065Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:39.489283Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:41.546190Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:43.471730Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:43.491721Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:43.534406Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:44.461089Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getClass"
+[2m2024-11-14T06:17:45.301373Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:45.436465Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:45.464858Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:45.473625Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:46.346348Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addDeclareTransaction"
+[2m2024-11-14T06:17:47.051282Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x460fb5f718d81024cfa3465424acc802cc2b32adc72109996420ffcfe3399bf"
+[2m2024-11-14T06:17:47.067736Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:47.104268Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 3586 | memory holes: 61 | ec_op_builtin: 3 | pedersen_builtin: 16 | range_check_builtin: 65"
+[2m2024-11-14T06:17:47.111600Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m6 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:47.214698Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:47.431574Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:49.438536Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:51.429116Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:52.069251Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getTransactionReceipt"
+[2m2024-11-14T06:17:52.135842Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_chainId"
+[2m2024-11-14T06:17:52.136310Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getNonce"
+[2m2024-11-14T06:17:52.137004Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_specVersion"
+[2m2024-11-14T06:17:52.137140Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_estimateFee"
+[2m2024-11-14T06:17:52.168024Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_addInvokeTransaction"
+[2m2024-11-14T06:17:52.168497Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x3285620d8caca9a5b0a3bb5d01b537cc8b08c238c1aab2b84404c64f0f4abca"
+[2m2024-11-14T06:17:52.199639Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 8246 | memory holes: 67 | ec_op_builtin: 3 | pedersen_builtin: 31 | range_check_builtin: 153"
+[2m2024-11-14T06:17:52.199653Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Event emitted. [3mkeys[0m[2m=[0m"0x26b160f10156dea0639bec90696772c640b9706a47f5b8c52ea1abe5858b34d"
+[2m2024-11-14T06:17:52.199849Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m7 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:17:53.215156Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:53.437045Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:55.449433Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:57.519296Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:17:59.567019Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:00.322991Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_getEvents"
+[2m2024-11-14T06:18:00.323515Z[0m [34mDEBUG[0m [2mserver[0m[2m:[0m [3mmethod[0m[2m=[0m"starknet_call"
+[2m2024-11-14T06:18:01.430975Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:03.432613Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:05.430401Z[0m [34mDEBUG[0m [2mmessaging[0m[2m:[0m Converting log into L1HandlerTx. [3mlog[0m[2m=[0mLog { inner: Log { address: 0xa899118f4bccb62f8c6a37887a4f450d8a4e92e0, data: LogData { topics: [0xdb80dd488acf86d17c747445b0eabb5d57c541d3bd7b6b87af987858e5066b2b, 0x000000000000000000000000b60971942e4528a811d24826768bc91ad1383d21, 0x043ecf6df61ae1b3283ee1fe88058d0362620c3e98ef809de3fe5015f0bfcc76, 0x0152a66344cac27b4ddd9fc98d5759d1dddbcdb781215be4fc6ee07b951fb684], data: 0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000075300000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000004fda9f21dd0e4432a7c671bdb4108a8e00000000000000000000000000000000b844b904c30d5d369e02375744bfe3b70000000000000000000000000000000000000000000000000000000001433d9c0000000000000000000000000000000000000000000000000000000000000000 } }, block_hash: Some(0x2958c0b36ebe541428f12ae5ee8a285feb6cde0795abd4379b44feed8ed8ca5e), block_number: Some(21184092), block_timestamp: Some(1731565067), transaction_hash: Some(0xe1dd8df4111c45aef20d89e08736d3f9ec8ff7b57dce7fa478729c3966aedaa1), transaction_index: Some(0), log_index: Some(0), removed: false }
+[2m2024-11-14T06:18:05.430927Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m L1Handler transaction added to the pool. [3mtx_hash[0m[2m=[0m0x6694ce6b8c72cdc52b3f52448bbc30dc622f2f8936ca677874e9b3f31694324 [3mcontract_address[0m[2m=[0m0x43ecf6df61ae1b3283ee1fe88058d0362620c3e98ef809de3fe5015f0bfcc76 [3mselector[0m[2m=[0m0x152a66344cac27b4ddd9fc98d5759d1dddbcdb781215be4fc6ee07b951fb684 [3mcalldata[0m[2m=[0m0xb60971942e4528a811d24826768bc91ad1383d21, 0x4fda9f21dd0e4432a7c671bdb4108a8e, 0xb844b904c30d5d369e02375744bfe3b7, 0x1433d9c, 0x0
+[2m2024-11-14T06:18:05.430945Z[0m [32m INFO[0m [2mkatana_pool::pool[0m[2m:[0m Transaction received. [3mhash[0m[2m=[0m"0x6694ce6b8c72cdc52b3f52448bbc30dc622f2f8936ca677874e9b3f31694324"
+[2m2024-11-14T06:18:05.430970Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m1
+[2m2024-11-14T06:18:05.434318Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Transaction resource usage. [3musage[0m[2m=[0m"steps: 2897 | memory holes: 11 | pedersen_builtin: 15 | range_check_builtin: 52"
+[2m2024-11-14T06:18:05.434327Z[0m [35mTRACE[0m [2mexecutor[0m[2m:[0m Event emitted. [3mkeys[0m[2m=[0m"0x23a1ffa6d839f89a9b2b26c4ff7265b60e2a1d0a3c33fc4dab30cb5bb510075"
+[2m2024-11-14T06:18:05.434590Z[0m [32m INFO[0m [2mkatana::core::backend[0m[2m:[0m Block mined. [3mblock_number[0m[2m=[0m8 [3mtx_count[0m[2m=[0m1
+[2m2024-11-14T06:18:07.215020Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Sent messages to the settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:07.215643Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:09.215296Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:11.215576Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:13.215416Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:15.215264Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:17.214832Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:19.215757Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:21.215769Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:23.215604Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:25.215505Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:27.215627Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:29.216018Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:31.215189Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:33.215468Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:35.215338Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:37.215664Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:39.215471Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:41.215212Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:43.215148Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:45.215825Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:47.215879Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:49.216112Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:51.215131Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:53.215414Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:55.215757Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:57.215851Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:18:59.216211Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:01.216133Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:03.215312Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:05.215553Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:07.215268Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:09.215957Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:11.215764Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:13.215894Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:15.215087Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:17.215296Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:19.215047Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:21.215654Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:23.215656Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:25.215641Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:27.215750Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:29.215922Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:31.214954Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:33.215572Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:35.215127Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:37.215860Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:39.215364Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:41.214856Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:43.215461Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:45.215220Z[0m [32m INFO[0m [2mmessaging[0m[2m:[0m Collected messages from settlement chain. [3mmsg_count[0m[2m=[0m0
+[2m2024-11-14T06:19:47.214711Z[0m [31mERROR[0m [2mmessaging[0m[2m:[0m Gathering messages for block. [3mblock[0m[2m=[0m21184101 [3merror[0m[2m=[0mEthereum provider error: error sending request for url (http://127.0.0.1:8545/)
